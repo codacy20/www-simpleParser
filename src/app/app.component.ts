@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UploadService } from '../app/upload/upload.service';
+import { Transaction } from './models/transaction.model';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -10,38 +11,9 @@ export class AppComponent {
     fileToUpload: File = null;
     csvContent: string;
     JSONData: any;
+    TransactionList: Transaction[];
 
     constructor(private fileUploadService: UploadService) {}
-
-    csvJSON(csvText) {
-        const lines = csvText.split('\n');
-
-        const result = [];
-
-        const headers = lines[0].split(',');
-        console.log(headers);
-        for (let i = 1; i < lines.length - 1; i++) {
-            const obj = {};
-            const currentline = lines[i].split(',');
-
-            for (let j = 0; j < headers.length; j++) {
-                obj[headers[j]] = currentline[j];
-            }
-
-            result.push(obj);
-        }
-
-        // return result; //JavaScript object
-        console.log(JSON.stringify(result)); // JSON
-        this.JSONData = JSON.stringify(result);
-    }
-
-    onFileLoad(fileLoadedEvent) {
-        const textFromFileLoaded = fileLoadedEvent.target.result;
-        this.csvContent = textFromFileLoaded;
-        // console.log(this.csvContent);
-        this.csvJSON(this.csvContent);
-    }
 
     onFileSelect(input: HTMLInputElement) {
         const files = input.files;
@@ -55,10 +27,30 @@ export class AppComponent {
         }
     }
 
-    // public handleFileInput(files: FileList) {
-    //     this.fileToUpload = files.item(0);
-    //     this.uploadFileToActivity();
-    // }
+    onFileLoad(fileLoadedEvent) {
+        const textFromFileLoaded = fileLoadedEvent.target.result;
+        this.csvContent = textFromFileLoaded;
+        this.csvJSON(this.csvContent);
+    }
+
+    csvJSON(csvText) {
+        const lines = csvText.split('\n');
+        const result = [];
+        const headers = lines[0].split(',');
+        for (let i = 1; i < lines.length - 1; i++) {
+            const obj = {};
+            const currentline = lines[i].split(',');
+            for (let j = 0; j < headers.length; j++) {
+                obj[headers[j]] = currentline[j];
+            }
+            result.push(obj);
+        }
+        this.JSONData = result;
+        this.TransactionList = this.JSONData.map((transaction: Transaction) =>
+            new Transaction().deserialize(transaction)
+        );
+    }
+
     // uploadFileToActivity() {
     //     this.fileUploadService.postFile(this.fileToUpload).subscribe(
     //         data => {
