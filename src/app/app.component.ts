@@ -10,7 +10,6 @@ export class AppComponent {
     title = 'www-simpleParser';
     fileToUpload: File = null;
     csvContent: string;
-    JSONData: any;
     TransactionList: Transaction[];
 
     constructor(private fileUploadService: UploadService) {}
@@ -27,6 +26,11 @@ export class AppComponent {
         }
     }
 
+    onSampleSelect() {
+        const data = this.fileUploadService.getLocalFile();
+        console.log(data);
+    }
+
     onFileLoad(fileLoadedEvent) {
         const textFromFileLoaded = fileLoadedEvent.target.result;
         this.csvContent = textFromFileLoaded;
@@ -34,6 +38,7 @@ export class AppComponent {
     }
 
     csvJSON(csvText) {
+        console.log(csvText);
         const lines = csvText.split('\n');
         const result = [];
         const headers = lines[0].split(',');
@@ -45,10 +50,10 @@ export class AppComponent {
             }
             result.push(obj);
         }
-        this.JSONData = result;
-        this.TransactionList = this.JSONData.map((transaction: Transaction) =>
+        this.TransactionList = result.map((transaction: Transaction) =>
             new Transaction().deserialize(transaction)
         );
+        console.log(this.TransactionList);
     }
 
     // uploadFileToActivity() {
