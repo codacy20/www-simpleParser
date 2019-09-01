@@ -26,44 +26,20 @@ export class AppComponent {
         }
     }
 
-    onSampleSelect() {
-        const data = this.fileUploadService.getLocalFile();
-        console.log(data);
+    async onSampleSelect() {
+        const data = await this.fileUploadService.getLocalFile();
+        this.TransactionList = data;
+        this.TransactionList = data.map(row => {
+            return row;
+        });
     }
 
     onFileLoad(fileLoadedEvent) {
         const textFromFileLoaded = fileLoadedEvent.target.result;
         this.csvContent = textFromFileLoaded;
-        this.csvJSON(this.csvContent);
+        const data = this.fileUploadService.csvJSON(this.csvContent);
+        this.TransactionList = data.map(row => {
+            return row;
+        });
     }
-
-    csvJSON(csvText) {
-        console.log(csvText);
-        const lines = csvText.split('\n');
-        const result = [];
-        const headers = lines[0].split(',');
-        for (let i = 1; i < lines.length - 1; i++) {
-            const obj = {};
-            const currentline = lines[i].split(',');
-            for (let j = 0; j < headers.length; j++) {
-                obj[headers[j]] = currentline[j];
-            }
-            result.push(obj);
-        }
-        this.TransactionList = result.map((transaction: Transaction) =>
-            new Transaction().deserialize(transaction)
-        );
-        console.log(this.TransactionList);
-    }
-
-    // uploadFileToActivity() {
-    //     this.fileUploadService.postFile(this.fileToUpload).subscribe(
-    //         data => {
-    //             // do something, if upload success
-    //         },
-    //         error => {
-    //             console.log(error);
-    //         }
-    //     );
-    // }
 }

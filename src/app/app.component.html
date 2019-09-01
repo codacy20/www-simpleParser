@@ -1,4 +1,4 @@
-<mat-grid-list cols="1" rowHeight="1:1" rowHeight="600px">
+<mat-grid-list cols="1" rowHeight="1:1" rowHeight="800px">
     <mat-grid-tile>
         <mat-card id="myCard">
             <h2>Process Transaction CSVs (mt940 format)</h2>
@@ -6,10 +6,16 @@
                 You can upload a csv file or use the provided sample csv file to
                 test the application.
             </p>
-            <mat-grid-list cols="2" rowHeight="1:1" rowHeight="100px">
+            <span *ngIf="!TransactionList">
+                Please load transactions using the sample the data or a csv file
+            </span>
+            <span *ngIf="TransactionList">
+                <b>{{ TransactionList.length }}</b> transaction were loaded!
+            </span>
+            <mat-grid-list cols="2" rowHeight="1:1" rowHeight="70px">
                 <mat-grid-tile>
                     <div class="upload-btn-wrapper">
-                        <button mat-stroked-button color="primary" class="btn">
+                        <button mat-stroked-button color="basic" class="btn">
                             Upload
                         </button>
                         <input
@@ -30,6 +36,16 @@
                     </button>
                 </mat-grid-tile>
             </mat-grid-list>
+            <ul *ngIf="TransactionList" style="height: 10em; overflow: auto">
+                <mat-divider></mat-divider>
+                <li *ngFor="let transaction of TransactionList">
+                    <p>Reference: {{ transaction.reference }}</p>
+                    <p>Description: {{ transaction.description }}</p>
+                </li>
+            </ul>
+            <button mat-stroked-button color="primary" class="btn">
+                Process
+            </button>
         </mat-card>
     </mat-grid-tile>
 </mat-grid-list>

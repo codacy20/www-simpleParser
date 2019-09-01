@@ -26,16 +26,11 @@ export class UploadService {
             .pipe(catchError(this.errorHandler));
     }
 
-    getLocalFile(): Transaction[] {
-        this.http.get('assets/records.csv', { responseType: 'text' }).subscribe(
-            data => {
-                this.transactions = this.csvJSON(data);
-            },
-            error => {
-                console.log(error);
-            }
-        );
-        console.log(this.transactions);
+    async getLocalFile(): Promise<Transaction[]> {
+        const unparsedResult = await this.http
+            .get('assets/records.csv', { responseType: 'text' })
+            .toPromise();
+        this.csvJSON(unparsedResult);
         return this.transactions;
     }
 
