@@ -59,6 +59,7 @@ export class AppComponent {
                 },
                 err => console.log(err)
             );
+        this.isDisabled = true;
         this.processed = true;
     }
 }
