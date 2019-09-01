@@ -9,6 +9,7 @@ import { map, filter } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Transaction } from '../models/transaction.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
     providedIn: 'root',
@@ -20,7 +21,7 @@ export class UploadService {
             'Content-Type': 'application/json',
         }),
     };
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private _snackBar: MatSnackBar) {}
 
     postFile(transactions: Transaction[]): Observable<Transaction[]> {
         const endpoint = 'http://localhost:3000/parser';
@@ -56,6 +57,11 @@ export class UploadService {
     }
 
     errorHandler(error: HttpErrorResponse) {
+        this._snackBar.open(
+            'Please check your connection and Input',
+            'dismiss',
+            { duration: 3000 }
+        );
         return throwError(error.message || 'Server Error! Sorry');
     }
 }

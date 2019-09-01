@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AppComponent } from './app.component';
 
@@ -17,6 +18,7 @@ const importExport = [
     MatCardModule,
     HttpClientModule,
     MatDividerModule,
+    MatSnackBarModule,
 ];
 
 @NgModule({
