@@ -22,7 +22,6 @@ export class AppComponent {
         if (files && files.length) {
             const fileToRead = files[0];
             const fileReader = new FileReader();
-            // fileReader.onload = this.onFileLoad;
             fileReader.onload = fileLoadedEvent =>
                 this.onFileLoad(fileLoadedEvent);
             fileReader.readAsText(fileToRead, 'UTF-8');
@@ -57,7 +56,7 @@ export class AppComponent {
                         return transaction;
                     });
                 },
-                err => console.log(err)
+                err => this.fileUploadService.errorHandler(err)
             );
         this.isDisabled = true;
         this.processed = true;
