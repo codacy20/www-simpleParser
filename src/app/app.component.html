@@ -9,7 +9,11 @@
             <span *ngIf="!TransactionList">
                 Please load transactions using the sample the data or a csv file
             </span>
-            <span *ngIf="TransactionList">
+            <span *ngIf="processed">
+                Processed results are shown below:
+                <b>{{ TransactionList.length }}</b> were invalid
+            </span>
+            <span *ngIf="TransactionList && !processed">
                 <b>{{ TransactionList.length }}</b> transaction were loaded!
             </span>
             <mat-grid-list cols="2" rowHeight="1:1" rowHeight="70px">
@@ -47,6 +51,7 @@
                 mat-stroked-button
                 color="primary"
                 class="btn"
+                [disabled]="isDisabled"
                 (click)="postFile()"
             >
                 Process

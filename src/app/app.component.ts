@@ -12,11 +12,13 @@ export class AppComponent {
     csvContent: string;
     TransactionList: Transaction[];
     processed: boolean;
+    isDisabled = true;
 
     constructor(private fileUploadService: UploadService) {}
 
     onFileSelect(input: HTMLInputElement) {
         const files = input.files;
+        this.isDisabled = false;
         if (files && files.length) {
             const fileToRead = files[0];
             const fileReader = new FileReader();
@@ -28,6 +30,7 @@ export class AppComponent {
     }
 
     async onSampleSelect() {
+        this.isDisabled = false;
         const data = await this.fileUploadService.getLocalFile();
         this.TransactionList = data;
         this.TransactionList = data.map(row => {
