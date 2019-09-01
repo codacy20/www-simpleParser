@@ -3,6 +3,7 @@ import {
     HttpClient,
     HttpErrorResponse,
     HttpResponse,
+    HttpHeaders,
 } from '@angular/common/http';
 import { map, filter } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
@@ -14,15 +15,17 @@ import { Transaction } from '../models/transaction.model';
 })
 export class UploadService {
     transactions: Transaction[];
+    httpOptions = {
+        headers: new HttpHeaders({
+            'Content-Type': 'application/json',
+        }),
+    };
     constructor(private http: HttpClient) {}
 
-    postFile(fileToUpload: File): Observable<boolean> {
-        const endpoint = 'http://localhost:3000/parser/upload';
-        console.log(fileToUpload);
-        const formData: FormData = new FormData();
-        formData.append('fileKey', fileToUpload, fileToUpload.name);
+    postFile(transactions: Transaction[]): Observable<Transaction[]> {
+        const endpoint = 'http://localhost:3000/parser';
         return this.http
-            .post<any>(endpoint, formData)
+            .post<Transaction[]>(endpoint, transactions, this.httpOptions)
             .pipe(catchError(this.errorHandler));
     }
 
@@ -55,4 +58,14 @@ export class UploadService {
     errorHandler(error: HttpErrorResponse) {
         return throwError(error.message || 'Server Error! Sorry');
     }
+
+    // postFile(fileToUpload: File) {
+    //     const endpoint = 'http://localhost:3000/parser/upload';
+    //     console.log(fileToUpload);
+    //     const formData: FormData = new FormData();
+    //     formData.append('fileKey', fileToUpload, fileToUpload.name);
+    //     return this.http
+    //         .post<any>(endpoint, formData)
+    //         .pipe(catchError(this.errorHandler));
+    // }
 }

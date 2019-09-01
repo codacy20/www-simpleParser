@@ -43,7 +43,12 @@
                     <p>Description: {{ transaction.description }}</p>
                 </li>
             </ul>
-            <button mat-stroked-button color="primary" class="btn">
+            <button
+                mat-stroked-button
+                color="primary"
+                class="btn"
+                (click)="postFile()"
+            >
                 Process
             </button>
         </mat-card>

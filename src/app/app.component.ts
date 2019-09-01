@@ -11,6 +11,7 @@ export class AppComponent {
     fileToUpload: File = null;
     csvContent: string;
     TransactionList: Transaction[];
+    processed: boolean;
 
     constructor(private fileUploadService: UploadService) {}
 
@@ -41,5 +42,20 @@ export class AppComponent {
         this.TransactionList = data.map(row => {
             return row;
         });
+    }
+
+    postFile() {
+        const result = this.fileUploadService
+            .postFile(this.TransactionList)
+            .subscribe(
+                response => {
+                    this.TransactionList = [];
+                    this.TransactionList = response.map(transaction => {
+                        return transaction;
+                    });
+                },
+                err => console.log(err)
+            );
+        this.processed = true;
     }
 }
